@@ -40,44 +40,54 @@
         .logo span { font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
         
         /* 2. 히어로 섹션 */
-        .hero { background-color: white; border-radius: 0 0 40px 40px; text-align: center; padding-bottom: 100px; overflow: hidden; }
+        .hero { background-color: white; border-radius: 0 0 40px 40px; text-align: center; padding-bottom: 100px; overflow: hidden; position: relative; }
+        .hero::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(90deg, #ccc, var(--primary-color), #ccc); border-radius: 2px; }
+        
         .hero-banner { width: 100%; height: 320px; }
         .hero-banner img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         
         .hero-content { padding: 60px 20px 0; max-width: 800px; margin: 0 auto; }
-        .hero-catchphrase { font-weight: 800; color: var(--text-sub); font-size: 20px; margin-bottom: 16px; letter-spacing: 1px; }
+        .hero-catchphrase { display: inline-block; font-weight: 800; color: var(--text-sub); font-size: 16px; margin-bottom: 20px; letter-spacing: 1px; padding: 4px 16px; border: 1px solid var(--border-color); border-radius: 20px; }
         .hero h1 { font-size: 52px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 24px; line-height: 1.3; }
         .hero p { font-size: 20px; color: var(--text-sub); font-weight: 500;}
 
-        /* 3. 도장 시설 (층별 분리 및 그리드) */
+        /* 3. 도장 시설 */
         .floor-section { margin-bottom: 60px; }
         .floor-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; border-left: 5px solid var(--primary-color); padding-left: 12px; }
         
         .facility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        /* 1층은 사진 1장이니 꽉 차게 */
         .grid-full { grid-template-columns: 1fr; }
         
         .facility-item { border-radius: 20px; overflow: hidden; background: #eee; aspect-ratio: 16/10; cursor: pointer; position: relative; }
         .facility-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
         .facility-item:hover img { transform: scale(1.05); }
-        /* 마우스 올리면 돋보기 아이콘 느낌을 위한 오버레이 */
         .facility-item::after { content: '🔍 확대보기'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); color: white; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 700; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .facility-item:hover::after { opacity: 1; }
 
-        /* 이미지 확대 모달 (팝업) */
+        /* 이미지 모달 */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s; align-items: center; justify-content: center; }
         .modal.show { display: flex; opacity: 1; }
-        .modal-content { max-width: 90%; max-height: 90%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .modal-content { max-width: 90%; max-height: 90%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: contain; }
         .close-modal { position: absolute; top: 30px; right: 40px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .close-modal:hover { color: #ccc; transform: scale(1.1); }
 
-        /* 4. 교육 과정 및 시범단 */
-        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px; padding: 32px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
-        .card h3 { font-size: 22px; margin-bottom: 12px; color: var(--primary-color); font-weight: 700; }
-        .card p { color: var(--text-sub); }
-        
-        .demo-team-card { grid-column: 1 / -1; display: flex; align-items: center; gap: 40px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        /* 4. 교육 과정 (띠별 수련표 업그레이드) */
+        .curriculum-item { 
+            position: relative; 
+            max-width: 480px; /* 크기를 적당하게 줄임 */
+            margin: 0 auto; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid var(--border-color);
+        }
+        .curriculum-item img { width: 100%; display: block; transition: transform 0.4s; }
+        .curriculum-item:hover img { transform: scale(1.03); }
+        .curriculum-item::after { content: '🔍 표 확대하기'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); color: white; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 700; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .curriculum-item:hover::after { opacity: 1; }
+
+        .demo-team-card { margin-top: 60px; display: flex; align-items: center; gap: 40px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
         .demo-team-card img { width: 160px; height: 160px; object-fit: contain; }
         .demo-team-card h3 { color: var(--primary-color); font-size: 28px; margin-bottom: 12px; font-weight: 800; }
         .demo-team-card p { color: var(--text-sub); font-size: 16px; }
@@ -91,7 +101,7 @@
         .instructor-info h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
         .instructor-info p { color: var(--text-sub); line-height: 1.5; }
 
-        /* 6. 시간표 (층별 분리 스타일) */
+        /* 6. 시간표 */
         .schedule-list { background: var(--bg-light); border-radius: 24px; padding: 40px; }
         .schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); }
         .schedule-item:last-child { border-bottom: none; }
@@ -99,12 +109,11 @@
         .class-details { flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
         .class-row { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; }
         
-        /* 층별 뱃지 */
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 700; color: #fff; }
-        .badge-1f { background-color: #4b5563; } /* 1층은 다크그레이 */
-        .badge-2f { background-color: var(--primary-color); } /* 2층은 메인블랙 */
+        .badge-1f { background-color: #4b5563; } 
+        .badge-2f { background-color: var(--primary-color); } 
 
-        /* 7. 오시는 길 (학교 앞 강조 이미지 포함) */
+        /* 7. 오시는 길 */
         .exterior-highlight { border-radius: 24px; overflow: hidden; margin-bottom: 40px; position: relative; aspect-ratio: 21/9; }
         .exterior-highlight img { width: 100%; height: 100%; object-fit: cover; }
         .exterior-text { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
@@ -117,13 +126,10 @@
         .address-info p { color: var(--text-sub); }
 
         /* 8. 1대1 카톡 문의 */
-        .floating-kakao { 
-            position: fixed; bottom: 40px; right: 40px; background-color: #FEE500; color: #191919; width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(254, 229, 0, 0.4); z-index: 1000; font-weight: 800; font-size: 13px; text-align: center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-        }
+        .floating-kakao { position: fixed; bottom: 40px; right: 40px; background-color: #FEE500; color: #191919; width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(254, 229, 0, 0.4); z-index: 1000; font-weight: 800; font-size: 13px; text-align: center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .floating-kakao svg { margin-bottom: 2px; }
         .floating-kakao:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(254, 229, 0, 0.6); }
 
-        /* 9. 네이버 지도 길찾기 버튼 */
         .btn-naver-map { display: inline-block; background-color: #03C75A; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 700; margin-top: 20px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(3, 199, 90, 0.2); }
         .btn-naver-map:hover { opacity: 0.8; }
 
@@ -132,8 +138,9 @@
             nav { padding: 15px 20px; }
             .hero-banner { height: 220px; }
             .hero h1 { font-size: 36px; }
-            .facility-grid { grid-template-columns: 1fr; } /* 모바일에선 사진 1장씩 세로로 */
-            .card-grid, .instructors-grid { grid-template-columns: 1fr; }
+            
+            .facility-grid { grid-template-columns: 1fr; } 
+            .instructors-grid { grid-template-columns: 1fr; }
             .demo-team-card { flex-direction: column; text-align: center; padding: 30px 20px; }
             .instructor-card img { height: 350px; }
             
@@ -206,25 +213,16 @@
     <section id="curriculum" class="fade-up">
         <h2 class="section-title">교육 과정</h2>
         <p class="section-subtitle">눈높이에 맞춘 체계적인 프로그램</p>
-        <div class="card-grid">
-            <div class="card">
-                <h3>유치부 / 초등부</h3>
-                <p>학교 체육과 연계한 줄넘기, 호신술. 바른 예절과 자신감을 기릅니다.</p>
-            </div>
-            <div class="card">
-                <h3>중고등 / 성인부</h3>
-                <p>다이어트, 체력 증진, 실전 호신술. 바쁜 일상 속 스트레스 해소에 탁월합니다.</p>
-            </div>
-            <div class="card">
-                <h3>선수반</h3>
-                <p>품새 및 겨루기 대회 출전, 태권도 관련 학과 입시를 위한 심화 훈련반입니다.</p>
-            </div>
-            <div class="demo-team-card fade-up">
-                <img src="IMG_2311.JPG" alt="광남태권도 시범단 로고">
-                <div>
-                    <h3>KWANGNAM DEMO TEAM</h3>
-                    <p>태권도의 꽃, 시범단. 절도 있는 동작과 고난이도 격파를 통해 한계에 도전하고 끈끈한 팀워크를 배웁니다.</p>
-                </div>
+        
+        <div class="curriculum-item" onclick="openModal('time.jpeg')">
+            <img src="time.jpeg" alt="광남태권도 띠별 수련표">
+        </div>
+
+        <div class="demo-team-card fade-up">
+            <img src="IMG_2311.JPG" alt="광남태권도 시범단 로고">
+            <div>
+                <h3>KWANGNAM DEMO TEAM</h3>
+                <p>태권도의 꽃, 시범단. 절도 있는 동작과 고난이도 격파를 통해 한계에 도전하고 끈끈한 팀워크를 배웁니다.</p>
             </div>
         </div>
     </section>
@@ -309,7 +307,7 @@
             <img src="IMG_2317.jpg" alt="광남태권도 외부 전경 및 학교 앞">
             <div class="exterior-text">
                 <h3>광남초등학교 정문 바로 앞!</h3>
-                <p>횡단보도 없이 가장 안전하고 빠르게 등하원 할 수 있습니다.</p>
+                <p>지도진 교통관리 아래 가장 안전하고 빠르게 등하원 할 수 있습니다.</p>
             </div>
         </div>
         
@@ -334,7 +332,6 @@
     </a>
 
     <script>
-        // 1. Fade-up 애니메이션
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -346,22 +343,20 @@
         }, observerOptions);
         document.querySelectorAll('.fade-up').forEach(section => observer.observe(section));
 
-        // 2. 이미지 모달창 제어 스크립트
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImage");
 
         function openModal(imageSrc) {
             modal.classList.add('show');
             modalImg.src = imageSrc;
-            document.body.style.overflow = 'hidden'; // 모달 떴을 때 배경 스크롤 방지
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {
             modal.classList.remove('show');
-            document.body.style.overflow = 'auto'; // 스크롤 다시 허용
+            document.body.style.overflow = 'auto'; 
         }
 
-        // 3. 네이버 지도 API 초기화
         window.onload = function() {
             var dojangPosition = new naver.maps.LatLng(37.4093, 127.2581); 
 
