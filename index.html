@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>광남태권도 - Manners and manners</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=w7pi3cxw7a"></script>
+    
+    <style>
+        /* 변수 설정 */
+        :root {
+            --primary-color: #191f28; 
+            --bg-light: #f9fafb;
+            --text-main: #191f28;
+            --text-sub: #8b95a1;
+            --border-color: #e5e8eb;
+        }
+
+        /* 기본 리셋 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { color: var(--text-main); line-height: 1.6; background-color: #ffffff; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* 공통 섹션 스타일 */
+        section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
+        .section-title { font-size: 32px; font-weight: 800; margin-bottom: 16px; text-align: center; }
+        .section-subtitle { font-size: 18px; color: var(--text-sub); margin-bottom: 60px; text-align: center; }
+
+        /* 스크롤 애니메이션 */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* 1. 네비게이션 */
+        nav { display: flex; justify-content: flex-start; align-items: center; padding: 15px 40px; position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo img { height: 36px; object-fit: contain; mix-blend-mode: multiply; } 
+        .logo span { font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        
+        /* 2. 히어로 섹션 */
+        .hero { background-color: white; border-radius: 0 0 40px 40px; text-align: center; padding-bottom: 100px; overflow: hidden; }
+        .hero-banner { width: 100%; height: 320px; }
+        .hero-banner img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        
+        .hero-content { padding: 60px 20px 0; max-width: 800px; margin: 0 auto; }
+        .hero-catchphrase { font-weight: 800; color: var(--text-sub); font-size: 20px; margin-bottom: 16px; letter-spacing: 1px; }
+        .hero h1 { font-size: 52px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 24px; line-height: 1.3; }
+        .hero p { font-size: 20px; color: var(--text-sub); font-weight: 500;}
+
+        /* 3. 도장 시설 (층별 분리 및 그리드) */
+        .floor-section { margin-bottom: 60px; }
+        .floor-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; border-left: 5px solid var(--primary-color); padding-left: 12px; }
+        
+        .facility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        /* 1층은 사진 1장이니 꽉 차게 */
+        .grid-full { grid-template-columns: 1fr; }
+        
+        .facility-item { border-radius: 20px; overflow: hidden; background: #eee; aspect-ratio: 16/10; cursor: pointer; position: relative; }
+        .facility-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .facility-item:hover img { transform: scale(1.05); }
+        /* 마우스 올리면 돋보기 아이콘 느낌을 위한 오버레이 */
+        .facility-item::after { content: '🔍 확대보기'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); color: white; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 700; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .facility-item:hover::after { opacity: 1; }
+
+        /* 이미지 확대 모달 (팝업) */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s; align-items: center; justify-content: center; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-content { max-width: 90%; max-height: 90%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 30px; right: 40px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .close-modal:hover { color: #ccc; transform: scale(1.1); }
+
+        /* 4. 교육 과정 및 시범단 */
+        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px; padding: 32px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        .card h3 { font-size: 22px; margin-bottom: 12px; color: var(--primary-color); font-weight: 700; }
+        .card p { color: var(--text-sub); }
+        
+        .demo-team-card { grid-column: 1 / -1; display: flex; align-items: center; gap: 40px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        .demo-team-card img { width: 160px; height: 160px; object-fit: contain; }
+        .demo-team-card h3 { color: var(--primary-color); font-size: 28px; margin-bottom: 12px; font-weight: 800; }
+        .demo-team-card p { color: var(--text-sub); font-size: 16px; }
+
+        /* 5. 지도진 소개 */
+        .instructors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .instructor-card { background: var(--bg-light); border-radius: 24px; overflow: hidden; text-align: center; padding-bottom: 40px; }
+        .instructor-card img { width: 100%; height: 450px; object-fit: cover; object-position: top; }
+        .instructor-info { padding: 30px 20px 0; }
+        .instructor-info span { color: var(--text-sub); font-weight: 700; font-size: 16px; margin-bottom: 8px; display: inline-block; }
+        .instructor-info h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+        .instructor-info p { color: var(--text-sub); line-height: 1.5; }
+
+        /* 6. 시간표 (층별 분리 스타일) */
+        .schedule-list { background: var(--bg-light); border-radius: 24px; padding: 40px; }
+        .schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); }
+        .schedule-item:last-child { border-bottom: none; }
+        .time { font-weight: 800; font-size: 20px; color: var(--text-main); width: 180px; flex-shrink: 0; }
+        .class-details { flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
+        .class-row { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; }
+        
+        /* 층별 뱃지 */
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 700; color: #fff; }
+        .badge-1f { background-color: #4b5563; } /* 1층은 다크그레이 */
+        .badge-2f { background-color: var(--primary-color); } /* 2층은 메인블랙 */
+
+        /* 7. 오시는 길 (학교 앞 강조 이미지 포함) */
+        .exterior-highlight { border-radius: 24px; overflow: hidden; margin-bottom: 40px; position: relative; aspect-ratio: 21/9; }
+        .exterior-highlight img { width: 100%; height: 100%; object-fit: cover; }
+        .exterior-text { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
+        .exterior-text h3 { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: #FEE500; }
+        .exterior-text p { font-size: 18px; font-weight: 600; }
+
+        #map { width: 100%; height: 400px; border-radius: 24px; background-color: #eee; margin-bottom: 24px; z-index: 1; }
+        .address-info { text-align: center; }
+        .address-info h3 { font-size: 22px; margin-bottom: 8px; font-weight: 700; }
+        .address-info p { color: var(--text-sub); }
+
+        /* 8. 1대1 카톡 문의 */
+        .floating-kakao { 
+            position: fixed; bottom: 40px; right: 40px; background-color: #FEE500; color: #191919; width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(254, 229, 0, 0.4); z-index: 1000; font-weight: 800; font-size: 13px; text-align: center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+        .floating-kakao svg { margin-bottom: 2px; }
+        .floating-kakao:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(254, 229, 0, 0.6); }
+
+        /* 9. 네이버 지도 길찾기 버튼 */
+        .btn-naver-map { display: inline-block; background-color: #03C75A; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 700; margin-top: 20px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(3, 199, 90, 0.2); }
+        .btn-naver-map:hover { opacity: 0.8; }
+
+        /* 모바일 반응형 처리 */
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .hero-banner { height: 220px; }
+            .hero h1 { font-size: 36px; }
+            .facility-grid { grid-template-columns: 1fr; } /* 모바일에선 사진 1장씩 세로로 */
+            .card-grid, .instructors-grid { grid-template-columns: 1fr; }
+            .demo-team-card { flex-direction: column; text-align: center; padding: 30px 20px; }
+            .instructor-card img { height: 350px; }
+            
+            .schedule-item { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .exterior-highlight { aspect-ratio: 16/10; }
+            .exterior-text h3 { font-size: 22px; }
+            
+            .floating-kakao { bottom: 20px; right: 20px; width: 65px; height: 65px; font-size: 11px; }
+            .floating-kakao svg { width: 22px; height: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="banner.png" alt="광남태권도 로고">
+            <span>광남태권도</span>
+        </div>
+    </nav>
+
+    <header class="hero fade-up">
+        <div class="hero-banner">
+            <img src="banner.png" alt="광남태권도 메인 배너">
+        </div>
+        <div class="hero-content">
+            <div class="hero-catchphrase">Manners and manners</div>
+            <h1>예의를 배우고,<br>예의를 실천합니다</h1>
+            <p>바른 인성과 건강한 신체의 시작, 광남태권도</p>
+        </div>
+    </header>
+
+    <section id="facility" class="fade-up">
+        <h2 class="section-title">수련 공간</h2>
+        <p class="section-subtitle">연령별, 목적별로 완벽하게 분리된 1층과 2층 수련 공간을 제공합니다.</p>
+        
+        <div class="floor-section">
+            <div class="floor-title">1층 전용 수련관 (유치부/저학년)</div>
+            <div class="facility-grid grid-full">
+                <div class="facility-item" onclick="openModal('IMG_2316.JPG')">
+                    <img src="IMG_2316.JPG" alt="1층 도장 전경">
+                </div>
+            </div>
+        </div>
+
+        <div class="floor-section">
+            <div class="floor-title">2층 수련관</div>
+            <div class="facility-grid">
+                <div class="facility-item" onclick="openModal('IMG_2314.JPG')">
+                    <img src="IMG_2314.JPG" alt="2층 전면">
+                </div>
+                <div class="facility-item" onclick="openModal('IMG_2315.JPG')">
+                    <img src="IMG_2315.JPG" alt="2층 수련공간">
+                </div>
+                <div class="facility-item" onclick="openModal('IMG_2318.jpg')">
+                    <img src="IMG_2318.jpg" alt="2층 측면">
+                </div>
+                <div class="facility-item" onclick="openModal('IMG_2319.jpg')">
+                    <img src="IMG_2319.jpg" alt="2층 창가뷰">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <section id="curriculum" class="fade-up">
+        <h2 class="section-title">교육 과정</h2>
+        <p class="section-subtitle">눈높이에 맞춘 체계적인 프로그램</p>
+        <div class="card-grid">
+            <div class="card">
+                <h3>유치부 / 초등부</h3>
+                <p>학교 체육과 연계한 줄넘기, 호신술. 바른 예절과 자신감을 기릅니다.</p>
+            </div>
+            <div class="card">
+                <h3>중고등 / 성인부</h3>
+                <p>다이어트, 체력 증진, 실전 호신술. 바쁜 일상 속 스트레스 해소에 탁월합니다.</p>
+            </div>
+            <div class="card">
+                <h3>선수반</h3>
+                <p>품새 및 겨루기 대회 출전, 태권도 관련 학과 입시를 위한 심화 훈련반입니다.</p>
+            </div>
+            <div class="demo-team-card fade-up">
+                <img src="IMG_2311.JPG" alt="광남태권도 시범단 로고">
+                <div>
+                    <h3>KWANGNAM DEMO TEAM</h3>
+                    <p>태권도의 꽃, 시범단. 절도 있는 동작과 고난이도 격파를 통해 한계에 도전하고 끈끈한 팀워크를 배웁니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="instructors" class="fade-up">
+        <h2 class="section-title">지도진 소개</h2>
+        <p class="section-subtitle">아이들의 바른 성장을 이끄는 든든한 멘토</p>
+        <div class="instructors-grid">
+            <div class="instructor-card">
+                <img src="IMG_2312.jpg" alt="관장님 사진">
+                <div class="instructor-info">
+                    <span>관장</span>
+                    <h3>관장님</h3>
+                    <p>오랜 지도 경력과 노하우로<br>사랑과 정성을 다해 지도합니다.</p>
+                </div>
+            </div>
+            <div class="instructor-card">
+                <img src="IMG_2313.jpg" alt="사범님 사진">
+                <div class="instructor-info">
+                    <span>사범</span>
+                    <h3>사범님</h3>
+                    <p>넘치는 열정과 에너지로<br>아이들과 눈높이를 맞추며 호흡합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule" class="fade-up">
+        <h2 class="section-title">수련 시간표</h2>
+        <p class="section-subtitle">※ 1층과 2층으로 분리하여 수준별 맞춤 지도를 진행합니다.</p>
+        
+        <div class="schedule-list">
+            <div class="schedule-item">
+                <div class="time">13:10 ~ 14:00</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 1, 2학년</div>
+                    <div class="class-row"><span class="badge badge-2f">2층</span> 3~6학년</div>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">14:10 ~ 15:00</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 1, 2학년</div>
+                    <div class="class-row"><span class="badge badge-2f">2층</span> 3~6학년</div>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">15:00 ~ 16:00</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 1, 2학년</div>
+                    <div class="class-row"><span class="badge badge-2f">2층</span> 3~6학년</div>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">16:10 ~ 17:00</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 유치원</div>
+                    <div class="class-row"><span class="badge badge-2f">2층</span> 1~6학년</div>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">17:00 ~ 18:00</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 시범단</div>
+                    <div class="class-row"><span class="badge badge-2f">2층</span> 1~6학년</div>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">19:00 ~ 20:10</div>
+                <div class="class-details">
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 중등부</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="fade-up">
+        <h2 class="section-title">오시는 길</h2>
+        <p class="section-subtitle">상담은 언제든 환영합니다. 편하게 방문해 주세요.</p>
+        
+        <div class="exterior-highlight">
+            <img src="IMG_2317.jpg" alt="광남태권도 외부 전경 및 학교 앞">
+            <div class="exterior-text">
+                <h3>광남초등학교 정문 바로 앞!</h3>
+                <p>횡단보도 없이 가장 안전하고 빠르게 등하원 할 수 있습니다.</p>
+            </div>
+        </div>
+        
+        <div id="map"></div>
+        
+        <div class="address-info">
+            <h3>광남태권도</h3>
+            <p>경기도 광주시 고불로46번길 13 (중대동)</p>
+            <p style="margin-top: 8px; font-weight: 700;">상담 전화: 031-767-2432</p>
+            
+            <a href="https://naver.me/I55ArlJd" target="_blank" class="btn-naver-map">
+                📍 네이버 지도 앱으로 길찾기
+            </a>
+        </div>
+    </section>
+
+    <a href="https://open.kakao.com/o/slpEWwli" target="_blank" class="floating-kakao">
+        <svg viewBox="0 0 100 100" width="28" height="28">
+            <path fill="#191919" d="M50 15C25.1 15 5 30.6 5 49.8c0 12.5 8.1 23.5 20.6 29.8-1.1 4.1-3.6 12.8-3.9 14.1-.4 1.6 1.1 1.7 2.1.9 1.6-1.1 18.2-12.2 21.3-14.3 1.6.2 3.2.3 4.9.3 24.9 0 45-15.6 45-34.8S74.9 15 50 15z"/>
+        </svg>
+        카톡상담
+    </a>
+
+    <script>
+        // 1. Fade-up 애니메이션
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-up').forEach(section => observer.observe(section));
+
+        // 2. 이미지 모달창 제어 스크립트
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+
+        function openModal(imageSrc) {
+            modal.classList.add('show');
+            modalImg.src = imageSrc;
+            document.body.style.overflow = 'hidden'; // 모달 떴을 때 배경 스크롤 방지
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto'; // 스크롤 다시 허용
+        }
+
+        // 3. 네이버 지도 API 초기화
+        window.onload = function() {
+            var dojangPosition = new naver.maps.LatLng(37.4093, 127.2581); 
+
+            var mapOptions = {
+                center: dojangPosition,
+                zoom: 16,
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: naver.maps.Position.TOP_RIGHT
+                }
+            };
+            
+            var map = new naver.maps.Map('map', mapOptions);
+            
+            var marker = new naver.maps.Marker({
+                position: dojangPosition,
+                map: map
+            });
+
+            var infoWindow = new naver.maps.InfoWindow({
+                content: '<div style="padding:10px; font-weight:700; color:#191f28; text-align:center;">광남태권도</div>'
+            });
+
+            infoWindow.open(map, marker);
+
+            naver.maps.Event.addListener(marker, "click", function(e) {
+                if (infoWindow.getMap()) {
+                    infoWindow.close();
+                } else {
+                    infoWindow.open(map, marker);
+                }
+            });
+        };
+    </script>
+</body>
+</html>
