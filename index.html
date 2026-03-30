@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>광남태권도 - Manners and manners</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-    
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=w7pi3cxw7a"></script>
-    
+<!--     
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=w7pi3cxw7a"></script> -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=w7pi3cxw7a"></script>
     <style>
         /* 변수 설정 */
         :root {
@@ -92,14 +92,14 @@
         .demo-team-card h3 { color: var(--primary-color); font-size: 28px; margin-bottom: 12px; font-weight: 800; }
         .demo-team-card p { color: var(--text-sub); font-size: 16px; }
 
-        /* 5. 지도진 소개 */
-        .instructors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .instructor-card { background: var(--bg-light); border-radius: 24px; overflow: hidden; text-align: center; padding-bottom: 40px; }
-        .instructor-card img { width: 100%; height: 450px; object-fit: cover; object-position: top; }
-        .instructor-info { padding: 30px 20px 0; }
-        .instructor-info span { color: var(--text-sub); font-weight: 700; font-size: 16px; margin-bottom: 8px; display: inline-block; }
-        .instructor-info h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
-        .instructor-info p { color: var(--text-sub); line-height: 1.5; }
+        /* 5. 지도진 소개 (3x2 그리드 설정) */
+        .instructors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .instructor-card { background: var(--bg-light); border-radius: 24px; overflow: hidden; text-align: center; padding-bottom: 30px; border: 1px solid var(--border-color); }
+        .instructor-card img { width: 100%; height: 320px; object-fit: cover; object-position: top; }
+        .instructor-info { padding: 24px 15px 0; }
+        .instructor-info span { color: var(--text-sub); font-weight: 700; font-size: 15px; margin-bottom: 8px; display: inline-block; }
+        .instructor-info h3 { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+        .instructor-info p { color: var(--text-sub); font-size: 14px; line-height: 1.5; }
 
         /* 6. 시간표 */
         .schedule-list { background: var(--bg-light); border-radius: 24px; padding: 40px; }
@@ -120,7 +120,7 @@
         .exterior-text h3 { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: #FEE500; }
         .exterior-text p { font-size: 18px; font-weight: 600; }
 
-        #map { width: 100%; height: 400px; border-radius: 24px; background-color: #eee; margin-bottom: 24px; z-index: 1; }
+        #map { width: 100%; height: 500px; border-radius: 24px; background-color: #eee; margin-bottom: 24px; z-index: 1; }
         .address-info { text-align: center; }
         .address-info h3 { font-size: 22px; margin-bottom: 8px; font-weight: 700; }
         .address-info p { color: var(--text-sub); }
@@ -138,16 +138,13 @@
             nav { padding: 15px 20px; }
             .hero-banner { height: 220px; }
             .hero h1 { font-size: 36px; }
-            
             .facility-grid { grid-template-columns: 1fr; } 
-            .instructors-grid { grid-template-columns: 1fr; }
+            .instructors-grid { grid-template-columns: 1fr; } /* 모바일에서는 1열 */
             .demo-team-card { flex-direction: column; text-align: center; padding: 30px 20px; }
             .instructor-card img { height: 350px; }
-            
             .schedule-item { flex-direction: column; align-items: flex-start; gap: 16px; }
             .exterior-highlight { aspect-ratio: 16/10; }
             .exterior-text h3 { font-size: 22px; }
-            
             .floating-kakao { bottom: 20px; right: 20px; width: 65px; height: 65px; font-size: 11px; }
             .floating-kakao svg { width: 22px; height: 22px; }
         }
@@ -176,16 +173,14 @@
     <section id="facility" class="fade-up">
         <h2 class="section-title">수련 공간</h2>
         <p class="section-subtitle">연령별, 목적별로 완벽하게 분리된 1층과 2층 수련 공간을 제공합니다.</p>
-        
         <div class="floor-section">
-            <div class="floor-title">1층 전용 수련관 (유치부/저학년)</div>
+            <div class="floor-title">1층 수련관 (유치부 5세~7세/저학년)</div>
             <div class="facility-grid grid-full">
                 <div class="facility-item" onclick="openModal('IMG_2316.JPG')">
                     <img src="IMG_2316.JPG" alt="1층 도장 전경">
                 </div>
             </div>
         </div>
-
         <div class="floor-section">
             <div class="floor-title">2층 수련관</div>
             <div class="facility-grid">
@@ -213,11 +208,9 @@
     <section id="curriculum" class="fade-up">
         <h2 class="section-title">교육 과정</h2>
         <p class="section-subtitle">눈높이에 맞춘 체계적인 프로그램</p>
-        
         <div class="curriculum-item" onclick="openModal('time.jpeg')">
             <img src="time.jpeg" alt="광남태권도 띠별 수련표">
         </div>
-
         <div class="demo-team-card fade-up">
             <img src="IMG_2311.JPG" alt="광남태권도 시범단 로고">
             <div>
@@ -232,7 +225,7 @@
         <p class="section-subtitle">아이들의 바른 성장을 이끄는 든든한 멘토</p>
         <div class="instructors-grid">
             <div class="instructor-card">
-                <img src="IMG_2312.JPG" alt="관장님 사진">
+                <img src="IMG_2312.JPG" alt="관장님">
                 <div class="instructor-info">
                     <span>관장</span>
                     <h3>관장님</h3>
@@ -240,11 +233,43 @@
                 </div>
             </div>
             <div class="instructor-card">
-                <img src="IMG_2313.JPG" alt="사범님 사진">
+                <img src="IMG_2313.JPG" alt="수석사범">
+                <div class="instructor-info">
+                    <span>수석사범</span>
+                    <h3>사범님</h3>
+                    <p>넘치는 열정과 에너지로<br>아이들과 눈높이를 맞추며 호흡합니다.</p>
+                </div>
+            </div>
+            <div class="instructor-card">
+                <img src="IMG_2382.jpg" alt="사범">
                 <div class="instructor-info">
                     <span>사범</span>
                     <h3>사범님</h3>
-                    <p>넘치는 열정과 에너지로<br>아이들과 눈높이를 맞추며 호흡합니다.</p>
+                    <p>정확한 동작과 체계적인 수련으로<br>강인한 신체를 만들어줍니다.</p>
+                </div>
+            </div>
+            <div class="instructor-card">
+                <img src="IMG_2384.jpg" alt="사범">
+                <div class="instructor-info">
+                    <span>사범</span>
+                    <h3>사범님</h3>
+                    <p>아이들의 자신감을 키워주는<br>따뜻하고 열정적인 지도자입니다.</p>
+                </div>
+            </div>
+            <div class="instructor-card">
+                <img src="IMG_2313.JPG" alt="사범">
+                <div class="instructor-info">
+                    <span>사범</span>
+                    <h3>사범님</h3>
+                    <p>세심한 배려와 꼼꼼한 지도로<br>기초부터 탄탄하게 가르칩니다.</p>
+                </div>
+            </div>
+            <div class="instructor-card">
+                <img src="IMG_2383.jpg" alt="매니저">
+                <div class="instructor-info">
+                    <span>매니저</span>
+                    <h3>매니저님</h3>
+                    <p>도장의 행정과 학부모 상담 등<br>원활한 교육 환경을 지원합니다.</p>
                 </div>
             </div>
         </div>
@@ -253,7 +278,6 @@
     <section id="schedule" class="fade-up">
         <h2 class="section-title">수련 시간표</h2>
         <p class="section-subtitle">※ 1층과 2층으로 분리하여 수준별 맞춤 지도를 진행합니다.</p>
-        
         <div class="schedule-list">
             <div class="schedule-item">
                 <div class="time">13:10 ~ 14:00</div>
@@ -270,7 +294,7 @@
                 </div>
             </div>
             <div class="schedule-item">
-                <div class="time">15:00 ~ 16:00</div>
+                <div class="time">15:10 ~ 16:00</div>
                 <div class="class-details">
                     <div class="class-row"><span class="badge badge-1f">1층</span> 1, 2학년</div>
                     <div class="class-row"><span class="badge badge-2f">2층</span> 3~6학년</div>
@@ -279,7 +303,7 @@
             <div class="schedule-item">
                 <div class="time">16:10 ~ 17:00</div>
                 <div class="class-details">
-                    <div class="class-row"><span class="badge badge-1f">1층</span> 유치원</div>
+                    <div class="class-row"><span class="badge badge-1f">1층</span> 유치부 (5세~7세)</div>
                     <div class="class-row"><span class="badge badge-2f">2층</span> 1~6학년</div>
                 </div>
             </div>
@@ -302,7 +326,6 @@
     <section id="location" class="fade-up">
         <h2 class="section-title">오시는 길</h2>
         <p class="section-subtitle">상담은 언제든 환영합니다. 편하게 방문해 주세요.</p>
-        
         <div class="exterior-highlight">
             <img src="IMG_2317.JPG" alt="광남태권도 외부 전경 및 학교 앞">
             <div class="exterior-text">
@@ -310,17 +333,12 @@
                 <p>지도진 교통관리 아래 가장 안전하고 빠르게 등하원 할 수 있습니다.</p>
             </div>
         </div>
-        
         <div id="map"></div>
-        
         <div class="address-info">
             <h3>광남태권도</h3>
             <p>경기도 광주시 고불로46번길 13 (중대동)</p>
             <p style="margin-top: 8px; font-weight: 700;">상담 전화: 031-767-2432</p>
-            
-            <a href="https://naver.me/I55ArlJd" target="_blank" class="btn-naver-map">
-                📍 네이버 지도 앱으로 길찾기
-            </a>
+            <a href="https://naver.me/I55ArlJd" target="_blank" class="btn-naver-map">📍 네이버 지도 앱으로 길찾기</a>
         </div>
     </section>
 
@@ -345,51 +363,69 @@
 
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImage");
+        function openModal(imageSrc) { modal.classList.add('show'); modalImg.src = imageSrc; document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('show'); document.body.style.overflow = 'auto'; }
 
-        function openModal(imageSrc) {
-            modal.classList.add('show');
-            modalImg.src = imageSrc;
-            document.body.style.overflow = 'hidden'; 
-        }
+// 기존 window.onload 내부의 map 생성 코드 바로 위에 넣어보세요.
+try {
+    var map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(37.4093, 127.2581),
+        zoom: 16
+    });
+    console.log("네이버 지도 로드 성공");
+} catch (e) {
+    console.error("네이버 지도 로드 중 에러 발생:", e);
+    alert("지도 에러: " + e.message);
+}
 
-        function closeModal() {
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto'; 
-        }
+// 네이버 API 자체에서 발생하는 인증 에러 감지 (전역)
+window.navermaps_auth_error = function(error) {
+    console.error("네이버 인증 에러 상세:", error);
+    // 여기서 어떤 URL이 거부되었는지 확실하게 보여줄 겁니다.
+};
 
         window.onload = function() {
-            var dojangPosition = new naver.maps.LatLng(37.4093, 127.2581); 
-
-            var mapOptions = {
-                center: dojangPosition,
-                zoom: 16,
-                zoomControl: true,
-                zoomControlOptions: {
-                    position: naver.maps.Position.TOP_RIGHT
-                }
+            // 1. 광남태권도 정확한 실제 좌표 적용
+            var dojangPosition = new naver.maps.LatLng(37.3936375, 127.2313524); 
+            
+            var mapOptions = { 
+                center: dojangPosition, 
+                zoom: 17, // 실제 건물 위치가 잘 보이도록 조금 더 확대 (기존 16 -> 17)
+                zoomControl: true, 
+                zoomControlOptions: { position: naver.maps.Position.TOP_RIGHT } 
             };
-            
             var map = new naver.maps.Map('map', mapOptions);
-            
-            var marker = new naver.maps.Marker({
-                position: dojangPosition,
-                map: map
+
+            // 2. 네이버 지도 앱 스타일의 '빨간색 마커' SVG 코드
+            var redMarkerSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 58" width="30" height="45"><path fill="#FF6355" d="M19 0C8.5 0 0 8.5 0 19c0 14.2 19 39 19 39s19-24.8 19-39C38 8.5 29.5 0 19 0z"/><circle fill="#FFF" cx="19" cy="19" r="6"/></svg>';
+
+            // 3. 마커에 빨간색 아이콘 씌우기
+            var marker = new naver.maps.Marker({ 
+                position: dojangPosition, 
+                map: map,
+                icon: {
+                    content: redMarkerSvg, // 기본 마커 대신 빨간색 SVG 핀 사용
+                    size: new naver.maps.Size(30, 45),
+                    anchor: new naver.maps.Point(15, 45) // 핀의 뾰족한 끝이 좌표에 정확히 맞도록 조정
+                }
             });
 
-            var infoWindow = new naver.maps.InfoWindow({
-                content: '<div style="padding:10px; font-weight:700; color:#191f28; text-align:center;">광남태권도</div>'
+            var infoWindow = new naver.maps.InfoWindow({ 
+                content: '<div style="padding:12px; font-weight:800; color:#191f28; text-align:center; font-size:15px;">광남태권도</div>',
+                borderWidth: 0, // 말풍선 촌스러운 테두리 제거
+                backgroundColor: "white",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.1)", // 예쁜 그림자 추가
+                anchorSkew: true
             });
-
             infoWindow.open(map, marker);
 
-            naver.maps.Event.addListener(marker, "click", function(e) {
-                if (infoWindow.getMap()) {
-                    infoWindow.close();
-                } else {
-                    infoWindow.open(map, marker);
-                }
+            naver.maps.Event.addListener(marker, "click", function(e) { 
+                if (infoWindow.getMap()) { infoWindow.close(); } 
+                else { infoWindow.open(map, marker); } 
             });
         };
+
+        
     </script>
 </body>
 </html>
